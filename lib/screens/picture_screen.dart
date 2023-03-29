@@ -67,17 +67,20 @@ class _PictureScreenState extends State<PictureScreen> {
                     crossAxisCount: 4, childAspectRatio: 1),
                 itemCount: loadedPhotos.length,
                 itemBuilder: (context, index) => Container(
-                  padding: EdgeInsets.all(10),
-                  height: 150,
-                  width: 150,
+                  margin: EdgeInsets.all(8),
+                  //padding: EdgeInsets.all(8),
+                  height: 180,
+                  width: 180,
                   child: InkWell(
                     onTap: () {
-                      Navigator.of(context).pushNamed(PhotoItem.routeName);
+                      Navigator.of(context)
+                          .pushNamed(PhotoItem.routeName, arguments: index);
                     },
                     child: FadeInImage(
                       placeholder: AssetImage('assets/images/ph.jpeg'),
                       image: NetworkImage(
                           loadedPhotos[index].thumbnailUrl as String),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

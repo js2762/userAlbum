@@ -1,18 +1,87 @@
 import 'package:flutter/material.dart';
-//import 'package:full_screen_image/full_screen_image.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:provider/provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import '../providers/picture_data_provider.dart';
 
-class PhotoItem extends StatelessWidget {
+class PhotoItem extends StatefulWidget {
   static const routeName = '/pictureItemScreen';
+
+  @override
+  State<PhotoItem> createState() => _PhotoItemState();
+}
+
+class _PhotoItemState extends State<PhotoItem> {
+  final carouselCntlr = CarouselController();
   @override
   Widget build(BuildContext context) {
+    final photoIndex = ModalRoute.of(context)!.settings.arguments;
     final loadedPhotoItems = Provider.of<PictureDataProvider>(context).items;
     return Scaffold(
       appBar: AppBar(
         title: Text('Photos'),
       ),
-      body: Center(),
+      body: Container(
+        color: Colors.black,
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                height: 600,
+                width: 600,
+                child: CarouselSlider.builder(
+                    itemCount: loadedPhotoItems.length,
+                    itemBuilder: (context, index, realIndex) {
+                      return Stack(
+                        children: [
+                          Image.network(
+                            loadedPhotoItems[index].url as String,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      );
+                    },
+                    carouselController: carouselCntlr,
+                    options: CarouselOptions(
+                      height: 400,
+                      initialPage: photoIndex as int,
+                      reverse: false,
+                      autoPlay: false,
+                      enlargeCenterPage: true,
+                      viewportFraction: 1, // to display full item
+                    )),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        carouselCntlr.previousPage();
+                      },
+                      icon: Icon(
+                        Icons.navigate_before,
+                        color: Colors.white,
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        carouselCntlr.nextPage();
+                      },
+                      icon: Icon(
+                        Icons.navigate_next,
+                        color: Colors.white,
+                      )),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
