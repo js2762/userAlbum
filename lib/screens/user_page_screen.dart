@@ -21,12 +21,6 @@ class _UserPageScreenState extends State<UserPageScreen> {
   List<UserData> searchedData = [];
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_isInit) {

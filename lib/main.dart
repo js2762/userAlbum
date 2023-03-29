@@ -11,6 +11,7 @@ import './screens/user_page_screen.dart';
 import './screens/album_page_screen.dart';
 import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
+import './screens/photo_item_screen.dart';
 
 void main() => runApp(MyWidget());
 
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
             UserPageScreen.routeName: (context) => UserPageScreen(),
             AlbumPageScreen.routeName: (context) => AlbumPageScreen(),
             PictureScreen.routeName: (context) => PictureScreen(),
+            PhotoItem.routeName: (context) => PhotoItem(),
           },
         ),
       ),

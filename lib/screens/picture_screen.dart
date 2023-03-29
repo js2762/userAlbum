@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:full_screen_image/full_screen_image.dart';
-import 'package:provider/provider.dart';
+//import 'package:full_screen_image/full_screen_image.dart';
 //import 'package:useralbum/models/picture_data.dart';
+import 'package:provider/provider.dart';
+import 'package:useralbum/screens/photo_item_screen.dart';
 import '../providers/picture_data_provider.dart';
-import '../widgets/photo_item.dart';
+//import 'photo_item_screen.dart';
 
 class PictureScreen extends StatefulWidget {
   const PictureScreen({super.key});
@@ -54,7 +55,7 @@ class _PictureScreenState extends State<PictureScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Photos'),
+          title: Text('Pictures'),
           centerTitle: true,
         ),
         body: _isLoading
@@ -65,10 +66,21 @@ class _PictureScreenState extends State<PictureScreen> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4, childAspectRatio: 1),
                 itemCount: loadedPhotos.length,
-                itemBuilder: (context, index) => FullScreenWidget(
-                    child: PhotoItem(loadedPhotos[index].url as String,
-                        loadedPhotos[index].thumbnailUrl as String),
-                    disposeLevel: DisposeLevel.High),
+                itemBuilder: (context, index) => Container(
+                  padding: EdgeInsets.all(10),
+                  height: 150,
+                  width: 150,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(PhotoItem.routeName);
+                    },
+                    child: FadeInImage(
+                      placeholder: AssetImage('assets/images/ph.jpeg'),
+                      image: NetworkImage(
+                          loadedPhotos[index].thumbnailUrl as String),
+                    ),
+                  ),
+                ),
               ));
   }
 }
