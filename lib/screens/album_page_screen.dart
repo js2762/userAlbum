@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:animated_background/animated_background.dart';
 import '../providers/album_data_provider.dart';
 import '../widgets/album_item.dart';
 
@@ -11,7 +13,8 @@ class AlbumPageScreen extends StatefulWidget {
   State<AlbumPageScreen> createState() => _AlbumPageScreenState();
 }
 
-class _AlbumPageScreenState extends State<AlbumPageScreen> {
+class _AlbumPageScreenState extends State<AlbumPageScreen>
+    with TickerProviderStateMixin {
   var _isInit = true;
   var _isLoading = false;
 
@@ -38,28 +41,44 @@ class _AlbumPageScreenState extends State<AlbumPageScreen> {
   @override
   Widget build(BuildContext context) {
     //final uId = ModalRoute.of(context)!.settings.arguments;
-    final loadedAlbumData = Provider.of<AlbumDataProvider>(context);
-    final albums = loadedAlbumData.items;
+    final albums = Provider.of<AlbumDataProvider>(context).items;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Album Page'),
+        title: Text(
+          'Album Page',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+        ),
         centerTitle: true,
       ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 8 / 3,
-                //crossAxisSpacing: 10,
-                //mainAxisSpacing: 10,
+          : AnimatedBackground(
+              behaviour: BubblesBehaviour(),
+              vsync: this,
+              child: AnimationLimiter(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 8 / 3,
+                    //crossAxisSpacing: 10,
+                    //mainAxisSpacing: 10,
+                  ),
+                  itemCount: albums.length,
+                  itemBuilder: (context, index) =>
+                      AnimationConfiguration.staggeredGrid(
+                    position: index,
+                    duration: Duration(milliseconds: 200),
+                    columnCount: 2,
+                    child: ScaleAnimation(
+                      child: AlbumItem(albums[index].id as int,
+                          albums[index].title as String),
+                    ),
+                  ),
+                ),
               ),
-              itemCount: albums.length,
-              itemBuilder: (context, index) => AlbumItem(
-                  albums[index].id as int, albums[index].title as String),
             ),
     );
   }

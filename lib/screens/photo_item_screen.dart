@@ -25,6 +25,7 @@ class _PhotoItemState extends State<PhotoItem> {
         color: Colors.black,
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 height: 600,
@@ -33,17 +34,43 @@ class _PhotoItemState extends State<PhotoItem> {
                     itemCount: loadedPhotoItems.length,
                     itemBuilder: (context, index, realIndex) {
                       return Stack(
+                        alignment: Alignment.center,
                         children: [
                           Image.network(
                             loadedPhotoItems[index].url as String,
                             fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            left: 0,
+                            child: IconButton(
+                                onPressed: () {
+                                  carouselCntlr.previousPage();
+                                },
+                                icon: Icon(
+                                  Icons.navigate_before,
+                                  color: Colors.white,
+                                  size: 50,
+                                )),
+                          ),
+                          Positioned(
+                            right: 0,
+                            child: IconButton(
+                                onPressed: () {
+                                  carouselCntlr.nextPage();
+                                },
+                                icon: Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.white,
+                                  size: 50,
+                                )),
                           ),
                         ],
                       );
                     },
                     carouselController: carouselCntlr,
                     options: CarouselOptions(
-                      height: 400,
+                      height: double.infinity,
+                      //height: 400,
                       initialPage: photoIndex as int,
                       reverse: false,
                       autoPlay: false,
@@ -51,33 +78,6 @@ class _PhotoItemState extends State<PhotoItem> {
                       viewportFraction: 1, // to display full item
                     )),
               ),
-              SizedBox(
-                height: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        carouselCntlr.previousPage();
-                      },
-                      icon: Icon(
-                        Icons.navigate_before,
-                        color: Colors.white,
-                      )),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        carouselCntlr.nextPage();
-                      },
-                      icon: Icon(
-                        Icons.navigate_next,
-                        color: Colors.white,
-                      )),
-                ],
-              )
             ],
           ),
         ),

@@ -12,6 +12,7 @@ import './screens/album_page_screen.dart';
 import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
 import './screens/photo_item_screen.dart';
+//import './widgets/slider_drawer.dart';
 
 void main() => runApp(MyWidget());
 

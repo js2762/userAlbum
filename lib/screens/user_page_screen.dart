@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:searchbar_animation/searchbar_animation.dart';
 import 'package:provider/provider.dart';
 import 'package:useralbum/models/user_data.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/user_data_provider.dart';
 import '../widgets/user_item.dart';
 import '../widgets/app_drawer.dart';
-import '../models/user_data.dart';
+//import '../models/user_data.dart';
 
 class UserPageScreen extends StatefulWidget {
   const UserPageScreen({super.key});
@@ -15,7 +16,8 @@ class UserPageScreen extends StatefulWidget {
   State<UserPageScreen> createState() => _UserPageScreenState();
 }
 
-class _UserPageScreenState extends State<UserPageScreen> {
+class _UserPageScreenState extends State<UserPageScreen>
+    with TickerProviderStateMixin {
   var _isInit = true;
   var _isLoading = false;
   List<UserData> searchedData = [];
@@ -63,41 +65,48 @@ class _UserPageScreenState extends State<UserPageScreen> {
   final textEdctrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    PreferredSizeWidget app_Bar;
+    PreferredSizeWidget appBar;
     final mediaQuery = MediaQuery.of(context);
     final deviceSize = mediaQuery.size;
-    final loadedUserData = Provider.of<UserDataProvider>(context);
-    List<UserData> users = loadedUserData.items;
+    List<UserData> users = Provider.of<UserDataProvider>(context).items;
 
     //searchedData = users;
     //var value;
-    app_Bar = AppBar(
-      title: Text('User Page'),
+    appBar = AppBar(
+      title: Text(
+        'User Page',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+      ),
       centerTitle: true,
     );
 
     return Scaffold(
-        appBar: app_Bar,
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
+      appBar: appBar,
+      drawer: AppDrawer(),
+      body: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
           child: Column(
             children: [
               /*  Padding(
-                padding: EdgeInsets.all(10),
-                child: TextField(
-                  style: TextStyle(color: Colors.black),
-                  //controller: _textEdctrl,
-                  //focusNode: _textFocusNode,
-                  onChanged: (value) {
-                    searchUser(value, users);
-                  },
-                  onSubmitted: (value) {
-                    searchUser(value, users);
-                  },
-                ),
-              ), */
+                    padding: EdgeInsets.all(10),
+                    child: TextField(
+                      style: TextStyle(color: Colors.black),
+                      //controller: _textEdctrl,
+                      //focusNode: _textFocusNode,
+                      onChanged: (value) {
+                        searchUser(value, users);
+                      },
+                      onSubmitted: (value) {
+                        searchUser(value, users);
+                      },
+                    ),
+                  ), */
 
               SearchBarAnimation(
+                  enableKeyboardFocus: true,
                   textInputType: TextInputType.name,
                   onSaved: (value) => searchUser(value, users),
                   onFieldSubmitted: (value) => searchUser(value, users),
@@ -122,43 +131,56 @@ class _UserPageScreenState extends State<UserPageScreen> {
               _isLoading
                   ? Container(
                       height: (deviceSize.height -
-                              app_Bar.preferredSize.height -
+                              appBar.preferredSize.height -
                               mediaQuery.padding.top) *
                           0.9,
                       child: Center(child: CircularProgressIndicator()))
                   : Container(
                       height: (deviceSize.height -
-                              app_Bar.preferredSize.height -
+                              appBar.preferredSize.height -
                               mediaQuery.padding.top) *
                           0.9,
                       child: Padding(
                         padding: EdgeInsets.all(5),
-                        child: GridView.builder(
-                          padding: EdgeInsets.all(13),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 2 / 3,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
-                          itemCount: searchedData.isEmpty
-                              ? users.length
-                              : searchedData.length,
-                          itemBuilder: (context, index) => searchedData.isEmpty
-                              ? UserItem(
-                                  users[index].id as int,
-                                  users[index].name as String,
-                                  users[index].email as String)
-                              : UserItem(
-                                  searchedData[index].id as int,
-                                  searchedData[index].name as String,
-                                  searchedData[index].email as String),
+                        child: AnimationLimiter(
+                          child: GridView.builder(
+                            padding: EdgeInsets.all(13),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 2 / 3,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                            itemCount: searchedData.isEmpty
+                                ? users.length
+                                : searchedData.length,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredGrid(
+                              position: index,
+                              duration: Duration(milliseconds: 400),
+                              columnCount: 2,
+                              child: searchedData.isEmpty
+                                  ? FlipAnimation(
+                                      child: UserItem(
+                                          users[index].id as int,
+                                          users[index].name as String,
+                                          users[index].email as String),
+                                    )
+                                  : UserItem(
+                                      searchedData[index].id as int,
+                                      searchedData[index].name as String,
+                                      searchedData[index].email as String,
+                                    ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 

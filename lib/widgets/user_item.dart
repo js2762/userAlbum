@@ -12,32 +12,30 @@ class UserItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final user = Provider.of(context, listen: false);
-    return Container(
-      //decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-        child: GridTile(
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(AlbumPageScreen.routeName, arguments: id);
-            },
-            child: Image.asset(
-              'assets/images/photo.jpeg',
-              fit: BoxFit.cover,
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(30)),
+      child: GridTile(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(AlbumPageScreen.routeName, arguments: id);
+          },
+          child: Image.asset(
+            'assets/images/photo4.jpeg',
+            fit: BoxFit.cover,
           ),
-          footer: GridTileBar(
-            backgroundColor: Colors.black87,
-            leading: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/photo3.jpeg'),
-            ),
-            title: Text(
-              name,
-              style: TextStyle(color: Colors.white),
-            ),
-            subtitle: Text(email),
+        ),
+        footer: GridTileBar(
+          backgroundColor: Colors.black87,
+          leading: CircleAvatar(
+            backgroundColor: Colors.white,
+            backgroundImage: AssetImage('assets/images/user2.png'),
           ),
+          title: Text(
+            name,
+            style: TextStyle(color: Colors.white),
+          ),
+          subtitle: Text(email),
         ),
       ),
     );

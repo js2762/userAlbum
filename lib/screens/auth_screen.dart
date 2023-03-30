@@ -1,60 +1,107 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:animate_gradient/animate_gradient.dart';
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
 
 enum AuthMode { SignUp, Login }
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends StatefulWidget {
   static const roteName = '/auth';
   const AuthScreen({super.key});
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 1200),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  Colors.purple,
-                  Color.fromARGB(255, 123, 56, 238),
-                  Color.fromARGB(255, 5, 66, 172),
-                ],
-                transform: GradientRotation(pi / 7),
-              )),
-            ),
-            SingleChildScrollView(
-              child: Container(
-                height: deviceSize.height,
-                width: deviceSize.width,
-                child: Padding(
-                  padding: EdgeInsets.all(30),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Login',
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        AuthField(),
-                      ]),
+        resizeToAvoidBottomInset:
+            false, // to stop background image overlaping when keyboard displayed above scaffold
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: AnimateGradient(
+            controller: _controller,
+            primaryColors: [
+              Colors.purple,
+              Colors.blue,
+              Colors.orange,
+              Colors.red,
+            ],
+            secondaryColors: [
+              Colors.deepPurple,
+              Colors.green,
+              Colors.deepOrange,
+              Colors.pink,
+            ],
+            child: Stack(
+              children: [
+                /* Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [
+                      Colors.purple,
+                      Color.fromARGB(255, 123, 56, 238),
+                      Color.fromARGB(255, 5, 66, 172),
+                    ],
+                    transform: GradientRotation(pi / 7),
+                  )),
+                ), */
+                SingleChildScrollView(
+                  child: Container(
+                    height: deviceSize.height,
+                    width: deviceSize.width,
+                    child: Padding(
+                      padding: EdgeInsets.all(30),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Login',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            AuthField(),
+                          ]),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -83,8 +130,8 @@ class _AuthFieldState extends State<AuthField> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('An Error Occured!'),
-        content: Text(message),
+        title: Text(message),
+        //content: Text('hello'),
         actions: [
           TextButton(
               onPressed: () {
@@ -118,6 +165,7 @@ class _AuthFieldState extends State<AuthField> {
       var errorMessage = 'Authentication failed.';
       if (error.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
+        print(errorMessage);
       } else if (error.toString().contains('INVALID_EMAIL')) {
         errorMessage = 'This is a valid email address.';
       } else if (error.toString().contains('WEAK_PASSWORD')) {
@@ -131,6 +179,7 @@ class _AuthFieldState extends State<AuthField> {
     } catch (error) {
       var errorMessage = 'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
+      //print(errorMessage);
     }
     setState(() {
       _isLoading = false;

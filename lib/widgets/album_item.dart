@@ -8,38 +8,31 @@ class AlbumItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 20,
-        ),
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.black26),
-          margin: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(PictureScreen.routeName, arguments: id);
-            },
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/photo2.png'),
-              ),
-              title: Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.black26),
+      margin: EdgeInsets.all(10),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .pushNamed(PictureScreen.routeName, arguments: id);
+        },
+        child: Center(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/photo2.png'),
+            ),
+            title: Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:useralbum/models/picture_data.dart';
 import 'package:provider/provider.dart';
 import 'package:useralbum/screens/photo_item_screen.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/picture_data_provider.dart';
 //import 'photo_item_screen.dart';
 
@@ -54,36 +55,52 @@ class _PictureScreenState extends State<PictureScreen> {
     } */
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Pictures'),
-          centerTitle: true,
+      appBar: AppBar(
+        title: Text(
+          'Pictures',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
         ),
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : GridView.builder(
+        centerTitle: true,
+      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : AnimationLimiter(
+              child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4, childAspectRatio: 1),
                 itemCount: loadedPhotos.length,
-                itemBuilder: (context, index) => Container(
-                  margin: EdgeInsets.all(8),
-                  //padding: EdgeInsets.all(8),
-                  height: 180,
-                  width: 180,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(PhotoItem.routeName, arguments: index);
-                    },
-                    child: FadeInImage(
-                      placeholder: AssetImage('assets/images/ph.jpeg'),
-                      image: NetworkImage(
-                          loadedPhotos[index].thumbnailUrl as String),
-                      fit: BoxFit.cover,
+                itemBuilder: (context, index) =>
+                    AnimationConfiguration.staggeredGrid(
+                  position: index,
+                  duration: Duration(milliseconds: 250),
+                  columnCount: 10,
+                  child: FlipAnimation(
+                    child: FadeInAnimation(
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        //padding: EdgeInsets.all(8),
+                        height: 180,
+                        width: 180,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(PhotoItem.routeName,
+                                arguments: index);
+                          },
+                          child: FadeInImage(
+                            placeholder: AssetImage('assets/images/ph.jpeg'),
+                            image: NetworkImage(
+                                loadedPhotos[index].thumbnailUrl as String),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ));
+              ),
+            ),
+    );
   }
 }
