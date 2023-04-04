@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:full_screen_image/full_screen_image.dart';
+//import 'package:full_screen_image/full_screen_image.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../providers/picture_data_provider.dart';
 
 class PhotoItem extends StatefulWidget {
   static const routeName = '/pictureItemScreen';
+
+  const PhotoItem({super.key});
 
   @override
   State<PhotoItem> createState() => _PhotoItemState();
@@ -19,7 +21,7 @@ class _PhotoItemState extends State<PhotoItem> {
     final loadedPhotoItems = Provider.of<PictureDataProvider>(context).items;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Photos'),
+        title: const Text('Photos'),
       ),
       body: Container(
         color: Colors.black,
@@ -46,7 +48,7 @@ class _PhotoItemState extends State<PhotoItem> {
                                 onPressed: () {
                                   carouselCntlr.previousPage();
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.navigate_before,
                                   color: Colors.white,
                                   size: 50,
@@ -58,7 +60,7 @@ class _PhotoItemState extends State<PhotoItem> {
                                 onPressed: () {
                                   carouselCntlr.nextPage();
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.navigate_next,
                                   color: Colors.white,
                                   size: 50,

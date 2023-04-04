@@ -11,14 +11,14 @@ class AppDrawer extends StatelessWidget {
     return SafeArea(
         child: Drawer(
       child: Container(
-        decoration: BoxDecoration(color: Color.fromARGB(255, 47, 18, 10)),
+        decoration: const BoxDecoration(color: Color.fromARGB(255, 47, 18, 10)),
         child: AnimationLimiter(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               AnimationConfiguration.staggeredList(
                 position: 1,
-                duration: Duration(milliseconds: 800),
+                duration: const Duration(milliseconds: 800),
                 child: SlideAnimation(
                   child: Container(
                     height: 300,
@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
                           height: 200,
                           width: 200,
                         ),
-                        Text(
+                        const Text(
                           'Photo Album',
                           style: TextStyle(
                               fontSize: 25,
@@ -42,13 +42,13 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              Divider(
+              const Divider(
                 color: Colors.white,
                 thickness: 5,
               ),
               AnimationConfiguration.staggeredList(
                 position: 0,
-                duration: Duration(milliseconds: 800),
+                duration: const Duration(milliseconds: 800),
                 child: FlipAnimation(
                   child: Column(
                     children: [
@@ -56,20 +56,20 @@ class AppDrawer extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).pushReplacementNamed('/');
                         },
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.home,
                           color: Colors.white,
                         ),
-                        title: Text(
+                        title: const Text(
                           'Home',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      Divider(
+                      const Divider(
                         color: Colors.white,
                         thickness: 1,
                       ),
-                      ListTile(
+                      const ListTile(
                         leading: Icon(
                           Icons.info,
                           color: Colors.white,
@@ -79,11 +79,11 @@ class AppDrawer extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      Divider(
+                      const Divider(
                         color: Colors.white,
                         thickness: 1,
                       ),
-                      ListTile(
+                      const ListTile(
                         leading: Icon(
                           Icons.settings,
                           color: Colors.white,
@@ -93,7 +93,7 @@ class AppDrawer extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      Divider(
+                      const Divider(
                         color: Colors.white,
                         thickness: 1,
                       ),
@@ -103,11 +103,11 @@ class AppDrawer extends StatelessWidget {
                           Navigator.of(context).pushReplacementNamed('/');
                           Provider.of<Auth>(context, listen: false).logout();
                         },
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.logout,
                           color: Colors.white,
                         ),
-                        title: Text(
+                        title: const Text(
                           'Logout',
                           style: TextStyle(color: Colors.white),
                         ),

@@ -9,10 +9,10 @@ class AlbumItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.black26),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       child: InkWell(
         onTap: () {
           Navigator.of(context)
@@ -20,15 +20,15 @@ class AlbumItem extends StatelessWidget {
         },
         child: Center(
           child: ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               backgroundImage: AssetImage('assets/images/photo2.png'),
             ),
             title: Text(
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ),

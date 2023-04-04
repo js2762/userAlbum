@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:useralbum/models/user_data.dart';
+//import 'package:useralbum/models/user_data.dart';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {

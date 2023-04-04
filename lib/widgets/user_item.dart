@@ -13,7 +13,7 @@ class UserItem extends StatelessWidget {
   Widget build(BuildContext context) {
     //final user = Provider.of(context, listen: false);
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(30)),
+      borderRadius: const BorderRadius.all(Radius.circular(30)),
       child: GridTile(
         child: InkWell(
           onTap: () {
@@ -27,13 +27,13 @@ class UserItem extends StatelessWidget {
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: AssetImage('assets/images/user2.png'),
           ),
           title: Text(
             name,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           subtitle: Text(email),
         ),

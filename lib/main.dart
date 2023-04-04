@@ -12,9 +12,10 @@ import './screens/album_page_screen.dart';
 import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
 import './screens/photo_item_screen.dart';
+
 //import './widgets/slider_drawer.dart';
 
-void main() => runApp(MyWidget());
+void main() => runApp(const MyWidget());
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -31,9 +32,9 @@ class _MyWidgetState extends State<MyWidget> {
       home: SafeArea(
         child: AnimatedSplashScreen(
           splash: Image.asset('assets/images/sp.png'),
-          nextScreen: MyApp(),
+          nextScreen: const MyApp(),
           splashTransition: SplashTransition.scaleTransition,
-          animationDuration: Duration(milliseconds: 1000),
+          animationDuration: const Duration(milliseconds: 1000),
           splashIconSize: double.infinity,
           backgroundColor: Colors.black,
           duration: 200,
@@ -44,6 +45,8 @@ class _MyWidgetState extends State<MyWidget> {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -69,22 +72,23 @@ class MyApp extends StatelessWidget {
               colorScheme:
                   ColorScheme.fromSwatch(primarySwatch: Colors.deepOrange)
                       .copyWith(secondary: Colors.red),
-              textTheme: TextTheme(subtitle1: TextStyle(color: Colors.white))),
+              textTheme:
+                  const TextTheme(subtitle1: TextStyle(color: Colors.white))),
           home: Auth.isAuth
-              ? UserPageScreen()
+              ? const UserPageScreen()
               : FutureBuilder(
                   future: Auth.tryAutoLogin(),
                   builder: (context, authResultSnapshot) =>
                       authResultSnapshot.connectionState ==
                               ConnectionState.waiting
-                          ? LoadingScreen()
-                          : AuthScreen(),
+                          ? const LoadingScreen()
+                          : const AuthScreen(),
                 ),
           routes: {
-            UserPageScreen.routeName: (context) => UserPageScreen(),
-            AlbumPageScreen.routeName: (context) => AlbumPageScreen(),
-            PictureScreen.routeName: (context) => PictureScreen(),
-            PhotoItem.routeName: (context) => PhotoItem(),
+            UserPageScreen.routeName: (context) => const UserPageScreen(),
+            AlbumPageScreen.routeName: (context) => const AlbumPageScreen(),
+            PictureScreen.routeName: (context) => const PictureScreen(),
+            PhotoItem.routeName: (context) => const PhotoItem(),
           },
         ),
       ),

@@ -1,11 +1,10 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animate_gradient/animate_gradient.dart';
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
 
-enum AuthMode { SignUp, Login }
+enum AuthMode { signUp, login }
 
 class AuthScreen extends StatefulWidget {
   static const roteName = '/auth';
@@ -24,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen>
     // TODO: implement initState
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
     )..repeat(reverse: true);
   }
@@ -49,13 +48,13 @@ class _AuthScreenState extends State<AuthScreen>
           },
           child: AnimateGradient(
             controller: _controller,
-            primaryColors: [
+            primaryColors: const [
               Colors.purple,
               Colors.blue,
               Colors.orange,
               Colors.red,
             ],
-            secondaryColors: [
+            secondaryColors: const [
               Colors.deepPurple,
               Colors.green,
               Colors.deepOrange,
@@ -79,11 +78,11 @@ class _AuthScreenState extends State<AuthScreen>
                     height: deviceSize.height,
                     width: deviceSize.width,
                     child: Padding(
-                      padding: EdgeInsets.all(30),
+                      padding: const EdgeInsets.all(30),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text(
                               'Login',
                               style: TextStyle(
@@ -118,7 +117,7 @@ class AuthField extends StatefulWidget {
 class _AuthFieldState extends State<AuthField> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  AuthMode _authMode = AuthMode.Login;
+  AuthMode _authMode = AuthMode.login;
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -137,7 +136,7 @@ class _AuthFieldState extends State<AuthField> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Okay'))
+              child: const Text('Okay'))
         ],
       ),
     );
@@ -152,7 +151,7 @@ class _AuthFieldState extends State<AuthField> {
       _isLoading = true;
     });
     try {
-      if (_authMode == AuthMode.Login) {
+      if (_authMode == AuthMode.login) {
         // login
         await Provider.of<Auth>(context, listen: false).login(
             _authData['email'] as String, _authData['password'] as String);
@@ -165,7 +164,7 @@ class _AuthFieldState extends State<AuthField> {
       var errorMessage = 'Authentication failed.';
       if (error.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
-        print(errorMessage);
+        //print(errorMessage);
       } else if (error.toString().contains('INVALID_EMAIL')) {
         errorMessage = 'This is a valid email address.';
       } else if (error.toString().contains('WEAK_PASSWORD')) {
@@ -187,13 +186,13 @@ class _AuthFieldState extends State<AuthField> {
   }
 
   void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == AuthMode.login) {
       setState(() {
-        _authMode = AuthMode.SignUp;
+        _authMode = AuthMode.signUp;
       });
     } else {
       setState(() {
-        _authMode = AuthMode.Login;
+        _authMode = AuthMode.login;
       });
     }
   }
@@ -203,14 +202,14 @@ class _AuthFieldState extends State<AuthField> {
     final deviceSize = MediaQuery.of(context).size;
     return Container(
       //width: deviceSize.width,
-      height: _authMode == AuthMode.SignUp ? 410 : 310,
+      height: _authMode == AuthMode.signUp ? 410 : 310,
       width: deviceSize.width * 0.75,
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               TextFormField(
@@ -225,22 +224,24 @@ class _AuthFieldState extends State<AuthField> {
                   _authData['email'] = value as String;
                 },
                 decoration: InputDecoration(
-                    errorStyle: TextStyle(color: Colors.white),
-                    label: Text(
+                    errorStyle: const TextStyle(color: Colors.white),
+                    label: const Text(
                       'Email',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2),
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               TextFormField(
@@ -255,28 +256,30 @@ class _AuthFieldState extends State<AuthField> {
                   _authData['password'] = value as String;
                 },
                 decoration: InputDecoration(
-                    errorStyle: TextStyle(color: Colors.white),
-                    label: Text(
+                    errorStyle: const TextStyle(color: Colors.white),
+                    label: const Text(
                       'Password',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2),
                     )),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              if (_authMode != AuthMode.Login)
+              if (_authMode != AuthMode.login)
                 TextFormField(
                   obscureText: true,
-                  validator: _authMode == AuthMode.SignUp
+                  validator: _authMode == AuthMode.signUp
                       ? (value) {
                           if (value != _passwordController.text) {
                             return 'Password do not match!';
@@ -284,58 +287,60 @@ class _AuthFieldState extends State<AuthField> {
                         }
                       : null,
                   decoration: InputDecoration(
-                      label: Text(
+                      label: const Text(
                         'Confirm Password',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 2),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
+                        borderSide:
+                            const BorderSide(color: Colors.white, width: 2),
                       )),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               if (_isLoading)
-                CircularProgressIndicator()
+                const CircularProgressIndicator()
               else
                 ElevatedButton(
                   onPressed: _submit,
-                  child: Text(
-                      ' ${_authMode == AuthMode.Login ? 'Login' : 'SignUp'}',
-                      style: TextStyle(color: Colors.black)),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(300, 50),
+                    minimumSize: const Size(300, 50),
                     backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
+                  child: Text(
+                      ' ${_authMode == AuthMode.login ? 'Login' : 'SignUp'}',
+                      style: const TextStyle(color: Colors.black)),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                      '${_authMode == AuthMode.Login ? "Don't Have Account?" : 'Already Have An Account!'}',
-                      style: TextStyle(
+                      '${_authMode == AuthMode.login ? "Don't Have Account?" : 'Already Have An Account!'}',
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15)),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   ),
                   TextButton(
                     onPressed: _switchAuthMode,
                     child: Text(
-                        '${_authMode == AuthMode.Login ? 'SignUp' : 'Login'}',
-                        style: TextStyle(
+                        '${_authMode == AuthMode.login ? 'SignUp' : 'Login'}',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),

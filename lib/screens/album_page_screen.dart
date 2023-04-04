@@ -45,14 +45,14 @@ class _AlbumPageScreenState extends State<AlbumPageScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Album Page',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
         ),
         centerTitle: true,
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : AnimatedBackground(
@@ -60,7 +60,7 @@ class _AlbumPageScreenState extends State<AlbumPageScreen>
               vsync: this,
               child: AnimationLimiter(
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 8 / 3,
                     //crossAxisSpacing: 10,
@@ -70,7 +70,7 @@ class _AlbumPageScreenState extends State<AlbumPageScreen>
                   itemBuilder: (context, index) =>
                       AnimationConfiguration.staggeredGrid(
                     position: index,
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     columnCount: 2,
                     child: ScaleAnimation(
                       child: AlbumItem(albums[index].id as int,

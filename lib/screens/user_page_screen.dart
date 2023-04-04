@@ -73,7 +73,7 @@ class _UserPageScreenState extends State<UserPageScreen>
     //searchedData = users;
     //var value;
     appBar = AppBar(
-      title: Text(
+      title: const Text(
         'User Page',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
       ),
@@ -82,7 +82,7 @@ class _UserPageScreenState extends State<UserPageScreen>
 
     return Scaffold(
       appBar: appBar,
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
@@ -117,12 +117,12 @@ class _UserPageScreenState extends State<UserPageScreen>
                   durationInMilliSeconds: 350,
                   textEditingController: textEdctrl,
                   isOriginalAnimation: false,
-                  trailingWidget: Icon(Icons.mic),
-                  secondaryButtonWidget: Icon(
+                  trailingWidget: const Icon(Icons.mic),
+                  secondaryButtonWidget: const Icon(
                     Icons.cancel,
                     color: Colors.deepOrange,
                   ),
-                  buttonWidget: Icon(
+                  buttonWidget: const Icon(
                     Icons.search,
                     color: Colors.deepOrange,
                   )),
@@ -134,19 +134,19 @@ class _UserPageScreenState extends State<UserPageScreen>
                               appBar.preferredSize.height -
                               mediaQuery.padding.top) *
                           0.9,
-                      child: Center(child: CircularProgressIndicator()))
+                      child: const Center(child: CircularProgressIndicator()))
                   : Container(
                       height: (deviceSize.height -
                               appBar.preferredSize.height -
                               mediaQuery.padding.top) *
                           0.9,
                       child: Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: AnimationLimiter(
                           child: GridView.builder(
-                            padding: EdgeInsets.all(13),
+                            padding: const EdgeInsets.all(13),
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     childAspectRatio: 2 / 3,
                                     crossAxisSpacing: 20,
@@ -157,7 +157,7 @@ class _UserPageScreenState extends State<UserPageScreen>
                             itemBuilder: (context, index) =>
                                 AnimationConfiguration.staggeredGrid(
                               position: index,
-                              duration: Duration(milliseconds: 400),
+                              duration: const Duration(milliseconds: 400),
                               columnCount: 2,
                               child: searchedData.isEmpty
                                   ? FlipAnimation(

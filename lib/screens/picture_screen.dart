@@ -56,30 +56,30 @@ class _PictureScreenState extends State<PictureScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Pictures',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
         ),
         centerTitle: true,
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : AnimationLimiter(
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4, childAspectRatio: 1),
                 itemCount: loadedPhotos.length,
                 itemBuilder: (context, index) =>
                     AnimationConfiguration.staggeredGrid(
                   position: index,
-                  duration: Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 250),
                   columnCount: 10,
                   child: FlipAnimation(
                     child: FadeInAnimation(
                       child: Container(
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         //padding: EdgeInsets.all(8),
                         height: 180,
                         width: 180,
@@ -89,7 +89,8 @@ class _PictureScreenState extends State<PictureScreen> {
                                 arguments: index);
                           },
                           child: FadeInImage(
-                            placeholder: AssetImage('assets/images/ph.jpeg'),
+                            placeholder:
+                                const AssetImage('assets/images/ph.jpeg'),
                             image: NetworkImage(
                                 loadedPhotos[index].thumbnailUrl as String),
                             fit: BoxFit.cover,
