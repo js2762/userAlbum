@@ -22,16 +22,13 @@ class _AlbumPageScreenState extends State<AlbumPageScreen>
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
+      _isLoading = true;
+
       final uId = ModalRoute.of(context)!.settings.arguments;
       Provider.of<AlbumDataProvider>(context)
-          .fetchAndSetUserData(uId as int)
+          .addAlbumData(uId as int)
           .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
     }
     _isInit = false;

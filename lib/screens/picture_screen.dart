@@ -23,16 +23,13 @@ class _PictureScreenState extends State<PictureScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
+      _isLoading = true;
+
       final albumId = ModalRoute.of(context)!.settings.arguments;
       Provider.of<PictureDataProvider>(context)
-          .fetchAndSetUserData(albumId as int)
+          .addPictureData(albumId as int)
           .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        _isLoading = false;
       });
     }
     _isInit = false;

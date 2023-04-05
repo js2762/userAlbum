@@ -20,19 +20,16 @@ class _UserPageScreenState extends State<UserPageScreen>
     with TickerProviderStateMixin {
   var _isInit = true;
   var _isLoading = false;
-  List<UserData> searchedData = [];
+  //List<UserData> searchedData = [];
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      Provider.of<UserDataProvider>(context).fetchAndSetUserData().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+      _isLoading = true;
+
+      Provider.of<UserDataProvider>(context).addUserData().then((_) {
+        _isLoading = false;
       });
     }
     //searchedData = Provider.of<UserDataProvider>(context).items;
@@ -42,7 +39,7 @@ class _UserPageScreenState extends State<UserPageScreen>
   }
 
   //final _textFocusNode = FocusNode();
-  void searchUser(String value, List<UserData> users) {
+  /* void searchUser(String value, List<UserData> users) {
     searchedData.clear();
     if (value.isEmpty) {
       setState(() {
@@ -54,13 +51,14 @@ class _UserPageScreenState extends State<UserPageScreen>
       //print(searchedData);
       setState(() {
         users.forEach((element) {
-          if (element.name!.toLowerCase().contains(value.toLowerCase())) {
+          if (element.name!.toLowerCase().contains(
+              value.toLowerCase().trim().replaceAll(RegExp(r'\b\s+\b'), ''))) {
             searchedData.add(element);
           }
         });
       });
     }
-  }
+  } */
 
   final textEdctrl = TextEditingController();
   @override
@@ -69,6 +67,8 @@ class _UserPageScreenState extends State<UserPageScreen>
     final mediaQuery = MediaQuery.of(context);
     final deviceSize = mediaQuery.size;
     List<UserData> users = Provider.of<UserDataProvider>(context).items;
+    List<UserData> searchedData =
+        Provider.of<UserDataProvider>(context).searchItems;
 
     //searchedData = users;
     //var value;
@@ -108,9 +108,15 @@ class _UserPageScreenState extends State<UserPageScreen>
               SearchBarAnimation(
                   enableKeyboardFocus: true,
                   textInputType: TextInputType.name,
-                  onSaved: (value) => searchUser(value, users),
-                  onFieldSubmitted: (value) => searchUser(value, users),
-                  onChanged: (value) => searchUser(value, users),
+                  onSaved: (value) =>
+                      Provider.of<UserDataProvider>(context, listen: false)
+                          .searchUser(value), //searchUser(value, users),
+                  onFieldSubmitted: (value) =>
+                      Provider.of<UserDataProvider>(context, listen: false)
+                          .searchUser(value), //searchUser(value, users),
+                  onChanged: (value) =>
+                      Provider.of<UserDataProvider>(context, listen: false)
+                          .searchUser(value), //searchUser(value, users),
                   //onEditingComplete: (value) => searchUser(value, users),
                   enableBoxBorder: true,
                   buttonShadowColour: Colors.deepOrange,
