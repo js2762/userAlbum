@@ -105,33 +105,34 @@ class _UserPageScreenState extends State<UserPageScreen>
                     ),
                   ), */
 
-              SearchBarAnimation(
-                  enableKeyboardFocus: true,
-                  textInputType: TextInputType.name,
-                  onSaved: (value) =>
-                      Provider.of<UserDataProvider>(context, listen: false)
+              Consumer<UserDataProvider>(
+                builder: (context, userDataProvider, _) {
+                  return SearchBarAnimation(
+                      enableKeyboardFocus: true,
+                      textInputType: TextInputType.name,
+                      onSaved: (value) => userDataProvider
                           .searchUser(value), //searchUser(value, users),
-                  onFieldSubmitted: (value) =>
-                      Provider.of<UserDataProvider>(context, listen: false)
+                      onFieldSubmitted: (value) => userDataProvider
                           .searchUser(value), //searchUser(value, users),
-                  onChanged: (value) =>
-                      Provider.of<UserDataProvider>(context, listen: false)
+                      onChanged: (value) => userDataProvider
                           .searchUser(value), //searchUser(value, users),
-                  //onEditingComplete: (value) => searchUser(value, users),
-                  enableBoxBorder: true,
-                  buttonShadowColour: Colors.deepOrange,
-                  durationInMilliSeconds: 350,
-                  textEditingController: textEdctrl,
-                  isOriginalAnimation: false,
-                  trailingWidget: const Icon(Icons.mic),
-                  secondaryButtonWidget: const Icon(
-                    Icons.cancel,
-                    color: Colors.deepOrange,
-                  ),
-                  buttonWidget: const Icon(
-                    Icons.search,
-                    color: Colors.deepOrange,
-                  )),
+                      //onEditingComplete: (value) => searchUser(value, users),
+                      enableBoxBorder: true,
+                      buttonShadowColour: Colors.deepOrange,
+                      durationInMilliSeconds: 350,
+                      textEditingController: textEdctrl,
+                      isOriginalAnimation: false,
+                      trailingWidget: const Icon(Icons.mic),
+                      secondaryButtonWidget: const Icon(
+                        Icons.cancel,
+                        color: Colors.deepOrange,
+                      ),
+                      buttonWidget: const Icon(
+                        Icons.search,
+                        color: Colors.deepOrange,
+                      ));
+                },
+              ),
               //
               //
               _isLoading
