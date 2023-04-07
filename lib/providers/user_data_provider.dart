@@ -38,6 +38,7 @@ class UserDataProvider with ChangeNotifier {
     _searchedData.clear();
     if (value.isEmpty) {
       //searchedData = users;
+      notifyListeners();
       return;
     } else {
       for (var element in items) {
