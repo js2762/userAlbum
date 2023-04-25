@@ -49,6 +49,9 @@ dependencies:
   animated_background: ^2.0.0
   animate_gradient: ^0.0.2
   audioplayers: ^0.20.1
+  dio: ^5.1.1
+  retrofit: ^4.0.1
+  get: ^4.6.5
   
 
 dev_dependencies:
@@ -61,6 +64,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  retrofit_generator: ^6.0.0+1
+  build_runner: ^2.3.3
 
 flutter_icons:
   android: true

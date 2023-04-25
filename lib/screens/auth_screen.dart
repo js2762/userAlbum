@@ -307,7 +307,9 @@ class _AuthFieldState extends State<AuthField> {
                 height: 30,
               ),
               if (_isLoading)
-                const CircularProgressIndicator()
+                const CircularProgressIndicator(
+                  color: Colors.white,
+                )
               else
                 ElevatedButton(
                   onPressed: _submit,

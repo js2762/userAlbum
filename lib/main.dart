@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 import './providers/auth.dart';
 import './providers/user_data_provider.dart';
@@ -12,6 +13,7 @@ import './screens/album_page_screen.dart';
 import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
 import './screens/photo_item_screen.dart';
+import './screens/getx_demo_screen.dart';
 
 //import './widgets/slider_drawer.dart';
 
@@ -27,7 +29,7 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: AnimatedSplashScreen(
@@ -89,6 +91,7 @@ class MyApp extends StatelessWidget {
             AlbumPageScreen.routeName: (context) => const AlbumPageScreen(),
             PictureScreen.routeName: (context) => const PictureScreen(),
             PhotoItem.routeName: (context) => const PhotoItem(),
+            GetXScreen.routeName: (context) => const GetXScreen(),
           },
         ),
       ),

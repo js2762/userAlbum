@@ -3,6 +3,8 @@ import 'package:searchbar_animation/searchbar_animation.dart';
 import 'package:provider/provider.dart';
 import 'package:useralbum/models/user_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:get/get.dart';
+import '../getX/user_getx.dart';
 import '../providers/user_data_provider.dart';
 import '../widgets/user_item.dart';
 import '../widgets/app_drawer.dart';
@@ -21,12 +23,17 @@ class _UserPageScreenState extends State<UserPageScreen>
   var _isInit = true;
   var _isLoading = false;
   //List<UserData> searchedData = [];
+  final userController = Get.put(UserDataGetX());
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     if (_isInit) {
       _isLoading = true;
+
+      /* userController.addUserData().then((_) {
+        _isLoading = false;
+      }); */
 
       Provider.of<UserDataProvider>(context).addUserData().then((_) {
         _isLoading = false;

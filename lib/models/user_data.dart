@@ -1,4 +1,16 @@
 //import 'package:flutter/material.dart';
+import 'package:retrofit/retrofit.dart';
+import 'package:dio/dio.dart';
+
+part 'user_data.g.dart';
+
+@RestApi(baseUrl: 'https://jsonplaceholder.typicode.com')
+abstract class RetrofitService {
+  factory RetrofitService(Dio dio, {String baseUrl}) = _RetrofitService;
+
+  @GET('/users')
+  Future<List<UserData>> getUsers();
+}
 
 class UserData {
   int? id;
@@ -18,4 +30,12 @@ class UserData {
     this.phone,
     this.website,
   });
+
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return UserData(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+    );
+  }
 }

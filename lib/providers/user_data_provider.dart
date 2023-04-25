@@ -20,6 +20,16 @@ class UserDataProvider with ChangeNotifier {
 
   Future<void> addUserData() async {
     var ob = ApiServices();
+    Future<List<UserData>> responseData2 = ob.userFetchAndSet();
+    List<UserData> responseData3 = await responseData2;
+
+    _items = responseData3;
+    //print(_items);
+    notifyListeners();
+  }
+
+  /* Future<void> addUserData() async {
+    var ob = ApiServices();
     Future<List<dynamic>> responseData2 = ob.userFetchAndSet();
     List<dynamic> responseData3 = await responseData2;
     final List<UserData> loadedUserData = [];
@@ -32,7 +42,7 @@ class UserDataProvider with ChangeNotifier {
     }
     _items = loadedUserData;
     notifyListeners();
-  }
+  } */
 
   void searchUser(String value) {
     _searchedData.clear();
