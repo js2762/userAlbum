@@ -49,7 +49,7 @@ class UserDataProvider with ChangeNotifier {
     if (value.isEmpty) {
       //searchedData = users;
       notifyListeners();
-      return;
+      // return;
     } else {
       for (var element in items) {
         if (element.name!.toLowerCase().contains(
