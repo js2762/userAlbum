@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animate_gradient/animate_gradient.dart';
 import '../providers/auth.dart';
-import '../models/http_exception.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+//import '../models/http_exception.dart';
 
 enum AuthMode { signUp, login }
 
@@ -161,21 +162,20 @@ class _AuthFieldState extends State<AuthField> {
         await Provider.of<Auth>(context, listen: false).signUp2(
             _authData['email'] as String, _authData['password'] as String);
       }
-    } catch (error) {
-      // print(error);
-      if (error.toString().contains('[firebase_auth/wrong-password]')) {
-        errorMessage = 'Invalid password';
-      } else if (error.toString().contains('[firebase_auth/user-not-found]')) {
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'user-not-found') {
         errorMessage = 'User not found, Please enter valid E-mail';
-      } else if (error
-          .toString()
-          .contains('[firebase_auth/email-already-in-use]')) {
+      } else if (error.code == 'wrong-password') {
+        errorMessage = 'Invalid password';
+      } else if (error.code == 'email-already-in-use') {
         errorMessage =
             'User is already exists with this E-mail, try with another E-mail';
       } else {
         errorMessage = 'Could not authenticate you. Please try again later.';
       }
       _showErrorDialog(errorMessage);
+    } catch (error) {
+      _showErrorDialog(error as String);
     }
     setState(() {
       _isLoading = false;
