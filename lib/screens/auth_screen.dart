@@ -124,6 +124,7 @@ class _AuthFieldState extends State<AuthField> {
   };
   final _passwordController = TextEditingController();
   var _isLoading = false;
+  var errorMessage;
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -153,32 +154,28 @@ class _AuthFieldState extends State<AuthField> {
     try {
       if (_authMode == AuthMode.login) {
         // login
-        await Provider.of<Auth>(context, listen: false).login(
+        await Provider.of<Auth>(context, listen: false).login2(
             _authData['email'] as String, _authData['password'] as String);
       } else {
         // sign up
-        await Provider.of<Auth>(context, listen: false).signUp(
+        await Provider.of<Auth>(context, listen: false).signUp2(
             _authData['email'] as String, _authData['password'] as String);
       }
-    } on HttpException catch (error) {
-      var errorMessage = 'Authentication failed.';
-      if (error.toString().contains('EMAIL_EXISTS')) {
-        errorMessage = 'This email address is already in use.';
-        //print(errorMessage);
-      } else if (error.toString().contains('INVALID_EMAIL')) {
-        errorMessage = 'This is a valid email address.';
-      } else if (error.toString().contains('WEAK_PASSWORD')) {
-        errorMessage = 'This password is too weak.';
-      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-        errorMessage = 'Could not find a user with that email.';
-      } else if (error.toString().contains('INVALID_PASSWORD')) {
-        errorMessage = 'Invalid password.';
+    } catch (error) {
+      // print(error);
+      if (error.toString().contains('[firebase_auth/wrong-password]')) {
+        errorMessage = 'Invalid password';
+      } else if (error.toString().contains('[firebase_auth/user-not-found]')) {
+        errorMessage = 'User not found, Please enter valid E-mail';
+      } else if (error
+          .toString()
+          .contains('[firebase_auth/email-already-in-use]')) {
+        errorMessage =
+            'User is already exists with this E-mail, try with another E-mail';
+      } else {
+        errorMessage = 'Could not authenticate you. Please try again later.';
       }
       _showErrorDialog(errorMessage);
-    } catch (error) {
-      var errorMessage = 'Could not authenticate you. Please try again later.';
-      _showErrorDialog(errorMessage);
-      //print(errorMessage);
     }
     setState(() {
       _isLoading = false;

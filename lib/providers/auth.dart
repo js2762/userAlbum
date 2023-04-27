@@ -1,10 +1,15 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+//import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:useralbum/models/user_data.dart';
 import '../models/http_exception.dart';
+import '../screens/getx_demo_screen.dart';
+import '../screens/user_page_screen.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -25,7 +30,7 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  Future<void> _authenticate(
+  /* Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     final url = Uri.parse(
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyBuNJbmCI3KsHW6q3ZeCoFAJ7sgK_qoO50');
@@ -47,14 +52,71 @@ class Auth with ChangeNotifier {
         throw HttpException(responseData['error']['message']);
       }
       _token = responseData['idToken'];
+      //print(_token);
+      //print(responseData['expiresIn']);
       _userId = responseData['localId'];
       _expiryDate = DateTime.now().add(
         Duration(
           seconds: int.parse(responseData['expiresIn']),
         ),
       );
-      _autoLogOut();
+      //print(_expiryDate);
       notifyListeners();
+      _autoLogOut();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(
+          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
+      prefs.setString('userData', userData);
+    } catch (error) {
+      throw error;
+    }
+  } */
+
+/*  Future<void> login(String email, String password) async {
+    return _authenticate(email, password, 'signInWithPassword');
+  }
+
+  Future<void> signUp(String email, String password) async {
+    return _authenticate(email, password, 'signUp');
+  } */
+
+  Future<void> login2(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      User? user = userCredential.user;
+      var idTokenResult = await user?.getIdTokenResult();
+      _token = await user?.getIdToken();
+      DateTime? expirationTime = idTokenResult!.expirationTime;
+      _expiryDate = expirationTime;
+
+      //print(_token);
+      notifyListeners();
+      _autoLogOut();
+      //Get.toNamed(GetXScreen.routeName);
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(
+          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
+      prefs.setString('userData', userData);
+    } catch (error) {
+      // print(error);
+      throw error;
+    }
+  }
+
+  Future<void> signUp2(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      User? user = userCredential.user;
+      var idTokenResult = await user?.getIdTokenResult();
+      _token = await user?.getIdToken();
+      DateTime? expirationTime = idTokenResult!.expirationTime;
+      _expiryDate = expirationTime;
+      // print(_token);
+      notifyListeners();
+      _autoLogOut();
+      //Get.to(() => GetXScreen());
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode(
           {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
@@ -64,13 +126,23 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> signUp(String email, String password) async {
-    return _authenticate(email, password, 'signUp');
-  }
-
-  Future<void> login(String email, String password) async {
-    return _authenticate(email, password, 'signInWithPassword');
-  }
+  /* Future<void> login2(String email, String password) async {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((userCredential) {
+      User? user = userCredential.user;
+      user!.getIdToken().then((idToken) {
+        _token = idToken.toString();
+        print(_token);
+        notifyListeners();
+      });
+      //Get.to(() => GetXScreen());
+    });
+    /* final prefs = await SharedPreferences.getInstance();
+    final userData = json.encode(
+        {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
+    prefs.setString('userData', userData); */
+  } */
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();

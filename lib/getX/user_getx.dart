@@ -13,7 +13,7 @@ class UserDataGetX extends GetxController {
     var ob = ApiServices();
     Future<List<UserData>> responseData2 = ob.userFetchAndSet();
     List<UserData> responseData3 = await responseData2;
-    _items.assignAll(responseData3);
+    _items = responseData3;
     //print(_items);
     update();
   }

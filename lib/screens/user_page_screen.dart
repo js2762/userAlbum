@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:searchbar_animation/searchbar_animation.dart';
+//import 'package:searchbar_animation/searchbar_animation.dart';
 import 'package:provider/provider.dart';
 import 'package:useralbum/models/user_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -18,8 +18,7 @@ class UserPageScreen extends StatefulWidget {
   State<UserPageScreen> createState() => _UserPageScreenState();
 }
 
-class _UserPageScreenState extends State<UserPageScreen>
-    with TickerProviderStateMixin {
+class _UserPageScreenState extends State<UserPageScreen> {
   var _isInit = true;
   var _isLoading = false;
   //List<UserData> searchedData = [];
