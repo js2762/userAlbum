@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
+
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 import './providers/auth.dart';
 import './providers/user_data_provider.dart';
@@ -19,9 +20,17 @@ import './screens/getx_demo_screen.dart';
 
 //import './widgets/slider_drawer.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  //FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   runApp(const MyWidget());
 }
 

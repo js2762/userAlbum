@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:useralbum/models/user_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../getX/user_getx.dart';
 import '../providers/user_data_provider.dart';
 import '../widgets/user_item.dart';
@@ -23,6 +25,43 @@ class _UserPageScreenState extends State<UserPageScreen> {
   var _isLoading = false;
   //List<UserData> searchedData = [];
   final userController = Get.put(UserDataGetX());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(Duration(milliseconds: 500), () {
+      Fluttertoast.showToast(
+        msg: 'Welcome back',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+        fontSize: 20,
+      );
+    });
+
+    super.initState();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) {
+        print("FirebaseMessaging.onMessageOpenedApp.listen");
+        if (message.notification != null) {
+          print(message.notification!.title);
+          print(message.notification!.body);
+          print("message.data22 ${message.data['_id']}");
+        }
+      },
+    );
+  }
 
   @override
   void didChangeDependencies() {
