@@ -1,10 +1,11 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 import './providers/auth.dart';
 import './providers/user_data_provider.dart';
@@ -17,6 +18,7 @@ import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
 import './screens/photo_item_screen.dart';
 import './screens/getx_demo_screen.dart';
+import './services/local_notification.dart';
 
 //import './widgets/slider_drawer.dart';
 
@@ -27,8 +29,11 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LocalNotificationService.initialize();
   await Firebase.initializeApp();
+
   //FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   runApp(const MyWidget());
@@ -42,6 +47,33 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+  @override
+  void initState() {
+    // gives you the message on which user taps
+    // and it opened the app from terminated state
+    FirebaseMessaging.instance.getInitialMessage();
+
+    // forground
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message.notification != null) {
+        print(message.notification?.body);
+        print(message.notification?.title);
+      }
+
+      LocalNotificationService.display(message);
+    });
+
+    // when the app is in background but opened and user taps
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      final routeName = message.data['route'];
+      print(routeName);
+      FirebaseAnalytics.instance.logEvent(
+          name: 'notification_open',
+          parameters: {'notification_id': message.notification?.title});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

@@ -1,3 +1,4 @@
+//import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 //import 'package:searchbar_animation/searchbar_animation.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,9 @@ import 'package:useralbum/models/user_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_analytics/firebase_analytics.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import '../getX/user_getx.dart';
 import '../providers/user_data_provider.dart';
 import '../widgets/user_item.dart';
@@ -39,10 +42,13 @@ class _UserPageScreenState extends State<UserPageScreen> {
         fontSize: 20,
       );
     });
+    // FirebaseAnalytics.instance.setCurrentScreen(screenName: 'UserPageScreen');
+    //FirebaseAnalytics.instance.logEvent(name: 'start_session');
+    //FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(true);
 
     super.initState();
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    /* FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
 
@@ -60,7 +66,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
           print("message.data22 ${message.data['_id']}");
         }
       },
-    );
+    ); */
   }
 
   @override
@@ -213,34 +219,38 @@ class _UserPageScreenState extends State<UserPageScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(5),
                             child: AnimationLimiter(
-                              child: GridView.builder(
-                                padding: const EdgeInsets.all(13),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 2 / 3,
-                                        crossAxisSpacing: 20,
-                                        mainAxisSpacing: 20),
-                                itemCount: searchedData.isEmpty
-                                    ? users.length
-                                    : searchedData.length,
-                                itemBuilder: (context, index) =>
-                                    AnimationConfiguration.staggeredGrid(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 400),
-                                  columnCount: 2,
-                                  child: searchedData.isEmpty
-                                      ? FlipAnimation(
-                                          child: UserItem(
-                                              users[index].id as int,
-                                              users[index].name as String,
-                                              users[index].email as String),
-                                        )
-                                      : UserItem(
-                                          searchedData[index].id as int,
-                                          searchedData[index].name as String,
-                                          searchedData[index].email as String,
-                                        ),
+                              child: Scrollbar(
+                                showTrackOnHover: true,
+                                child: GridView.builder(
+                                  // scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.all(13),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 2 / 3,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  itemCount: searchedData.isEmpty
+                                      ? users.length
+                                      : searchedData.length,
+                                  itemBuilder: (context, index) =>
+                                      AnimationConfiguration.staggeredGrid(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 400),
+                                    columnCount: 2,
+                                    child: searchedData.isEmpty
+                                        ? FlipAnimation(
+                                            child: UserItem(
+                                                users[index].id as int,
+                                                users[index].name as String,
+                                                users[index].email as String),
+                                          )
+                                        : UserItem(
+                                            searchedData[index].id as int,
+                                            searchedData[index].name as String,
+                                            searchedData[index].email as String,
+                                          ),
+                                  ),
                                 ),
                               ),
                             ),
