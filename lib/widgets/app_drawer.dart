@@ -102,6 +102,8 @@ class AppDrawer extends StatelessWidget {
                           Navigator.of(context).pop();
                           Navigator.of(context).pushReplacementNamed('/');
                           Provider.of<Auth>(context, listen: false).logout();
+                          Provider.of<Auth>(context, listen: false)
+                              .googleSignOut();
                         },
                         leading: const Icon(
                           Icons.logout,

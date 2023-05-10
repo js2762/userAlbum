@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:flutter_native_splash/flutter_native_splash.dart';
 import './providers/auth.dart';
 import './providers/user_data_provider.dart';
 import './providers/album_data_provider.dart';
 import './providers/picture_data_provider.dart';
+import './providers/firestore_database_provider.dart';
 import './screens/auth_screen.dart';
 import './screens/user_page_screen.dart';
 import './screens/album_page_screen.dart';
@@ -18,6 +20,8 @@ import './screens/picture_screen.dart';
 import './screens/loading_screen.dart';
 import './screens/photo_item_screen.dart';
 import './screens/getx_demo_screen.dart';
+import './screens/cloud_firestore_screen.dart';
+import './screens/google_login_screen.dart';
 import './services/local_notification.dart';
 
 //import './widgets/slider_drawer.dart';
@@ -101,6 +105,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+          value: UserDatabase(),
+        ),
+        ChangeNotifierProvider.value(
           value: Auth(),
         ),
         ChangeNotifierProvider.value(
@@ -123,16 +130,22 @@ class MyApp extends StatelessWidget {
                       .copyWith(secondary: Colors.red),
               textTheme:
                   const TextTheme(subtitle1: TextStyle(color: Colors.white))),
-          home: Auth.isAuth
-              ? const UserPageScreen()
-              : FutureBuilder(
-                  future: Auth.tryAutoLogin(),
-                  builder: (context, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? const LoadingScreen()
-                          : const AuthScreen(),
-                ),
+          home: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasData) {
+                return ProfileScreen();
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Something Went Wrong!'));
+              } else {
+                return AuthScreen();
+              }
+            },
+          ),
           routes: {
             UserPageScreen.routeName: (context) => const UserPageScreen(),
             AlbumPageScreen.routeName: (context) => const AlbumPageScreen(),

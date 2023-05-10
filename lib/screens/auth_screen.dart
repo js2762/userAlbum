@@ -64,25 +64,26 @@ class _AuthScreenState extends State<AuthScreen>
             child: Stack(
               children: [
                 /* Container(
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [
-                      Colors.purple,
-                      Color.fromARGB(255, 123, 56, 238),
-                      Color.fromARGB(255, 5, 66, 172),
-                    ],
-                    transform: GradientRotation(pi / 7),
-                  )),
-                ), */
-                SingleChildScrollView(
-                  child: Container(
-                    height: deviceSize.height,
-                    width: deviceSize.width,
-                    child: Padding(
-                      padding: const EdgeInsets.all(30),
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                      colors: [
+                        Colors.purple,
+                        Color.fromARGB(255, 123, 56, 238),
+                        Color.fromARGB(255, 5, 66, 172),
+                      ],
+                      transform: GradientRotation(pi / 7),
+                    )),
+                  ), */
+                Container(
+                  height: deviceSize.height,
+                  width: deviceSize.width,
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: SingleChildScrollView(
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          //mainAxisAlignment: MainAxisAlignment.center,
+                          //crossAxisAlignment: CrossAxisAlignment.center,
                           children: const [
                             Text(
                               'Login',
@@ -182,6 +183,10 @@ class _AuthFieldState extends State<AuthField> {
     });
   }
 
+  Future<void> signIn() async {
+    Provider.of<Auth>(context, listen: false).signInWithGoogle();
+  }
+
   void _switchAuthMode() {
     if (_authMode == AuthMode.login) {
       setState(() {
@@ -199,7 +204,7 @@ class _AuthFieldState extends State<AuthField> {
     final deviceSize = MediaQuery.of(context).size;
     return Container(
       //width: deviceSize.width,
-      height: _authMode == AuthMode.signUp ? 410 : 310,
+      height: _authMode == AuthMode.signUp ? 410 : 400,
       width: deviceSize.width * 0.75,
       child: Form(
         key: _formKey,
@@ -343,9 +348,19 @@ class _AuthFieldState extends State<AuthField> {
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 15)),
-                  )
+                  ),
                 ],
-              )
+              ),
+              GestureDetector(
+                onTap: () async {
+                  signIn();
+                },
+                child: Container(
+                  height: 50,
+                  child: Image.network(
+                      'http://pngimg.com/uploads/google/google_PNG19635.png'),
+                ),
+              ),
             ],
           ),
         ),

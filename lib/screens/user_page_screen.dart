@@ -6,7 +6,7 @@ import 'package:useralbum/models/user_data.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 //import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import '../getX/user_getx.dart';
@@ -42,7 +42,7 @@ class _UserPageScreenState extends State<UserPageScreen> {
         fontSize: 20,
       );
     });
-    // FirebaseAnalytics.instance.setCurrentScreen(screenName: 'UserPageScreen');
+    FirebaseAnalytics.instance.setCurrentScreen(screenName: 'UserPageScreen');
     //FirebaseAnalytics.instance.logEvent(name: 'start_session');
     //FirebaseInAppMessaging.instance.setAutomaticDataCollectionEnabled(true);
 

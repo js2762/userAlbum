@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:useralbum/models/user_data.dart';
@@ -86,7 +87,7 @@ class Auth with ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
       var idTokenResult = await user?.getIdTokenResult();
-      _token = await user?.getIdToken();
+      //_token = await user?.getIdToken();
       DateTime? expirationTime = idTokenResult!.expirationTime;
       _expiryDate = expirationTime;
 
@@ -95,8 +96,10 @@ class Auth with ChangeNotifier {
       _autoLogOut();
       //Get.toNamed(GetXScreen.routeName);
       final prefs = await SharedPreferences.getInstance();
-      final userData = json.encode(
-          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
+      /*  final userData = json.encode(
+          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()}); */
+      final userData =
+          json.encode({'expiryDate': _expiryDate!.toIso8601String()});
       prefs.setString('userData', userData);
     } catch (error) {
       // print(error);
@@ -110,7 +113,7 @@ class Auth with ChangeNotifier {
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = userCredential.user;
       var idTokenResult = await user?.getIdTokenResult();
-      _token = await user?.getIdToken();
+      // _token = await user?.getIdToken();
       DateTime? expirationTime = idTokenResult!.expirationTime;
       _expiryDate = expirationTime;
       // print(_token);
@@ -118,8 +121,10 @@ class Auth with ChangeNotifier {
       _autoLogOut();
       //Get.to(() => GetXScreen());
       final prefs = await SharedPreferences.getInstance();
-      final userData = json.encode(
-          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()});
+      /*  final userData = json.encode(
+          {'token': _token, 'expiryDate': _expiryDate!.toIso8601String()}); */
+      final userData =
+          json.encode({'expiryDate': _expiryDate!.toIso8601String()});
       prefs.setString('userData', userData);
     } catch (error) {
       throw error;
@@ -144,7 +149,7 @@ class Auth with ChangeNotifier {
     prefs.setString('userData', userData); */
   } */
 
-  Future<bool> tryAutoLogin() async {
+  /* Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return false;
@@ -156,12 +161,12 @@ class Auth with ChangeNotifier {
     if (expiryDate.isBefore(DateTime.now())) {
       return false;
     }
-    _token = extractedUserData['token'];
+    //_token = extractedUserData['token'];
     _expiryDate = expiryDate;
     notifyListeners();
     _autoLogOut();
     return true;
-  }
+  } */
 
   Future<void> logout() async {
     _token = null;
@@ -180,6 +185,55 @@ class Auth with ChangeNotifier {
       _authTimer!.cancel();
     }
     final timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+    _authTimer = Timer(Duration(seconds: timeToExpiry), googleSignOut);
+  }
+
+  GoogleSignInAccount? gUser;
+  signInWithGoogle() async {
+    // begin interactive sign in process
+    gUser = await GoogleSignIn().signIn();
+    if (gUser == null) {
+      // User cancelled the sign-in process
+      return;
+    }
+    // if (user != null) {
+    //   gUser = user;
+    // }
+    //print(user.email);
+    //print(gUser?.email);
+
+    // obtain auth details from request
+    final gAuth = await gUser!.authentication;
+
+    // print(gAuth.accessToken);
+
+    // create a new credential for user
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+
+    // let's sign in
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    notifyListeners();
+    //_autoLogOut();
+  }
+
+  googleSignOut() async {
+    if (gUser != null) {
+      await GoogleSignIn().disconnect();
+    }
+    gUser = null;
+
+    // _token = null;
+    _expiryDate = null;
+    if (_authTimer != null) {
+      _authTimer!.cancel();
+      _authTimer = null;
+    }
+    FirebaseAuth.instance.signOut();
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
   }
 }
